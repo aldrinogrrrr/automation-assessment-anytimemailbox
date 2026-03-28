@@ -20,7 +20,6 @@ class HomePage {
     async verifyAddressResult(addressResult) {
         const locResult = this.page.locator(HomePageLocators.locResult);
         await locResult.waitFor({ state: 'visible' });
-        await expect(locResult).toBeVisible();
         await expect(locResult).toContainText(addressResult);
     }
 
