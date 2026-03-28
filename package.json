@@ -1,0 +1,23 @@
+{
+  "name": "automation-assessment-anytimemailbox",
+  "version": "1.0.0",
+  "description": "This is for assessment-purposes only",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aldrinogrrrr/automation-assessment-anytimemailbox.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/aldrinogrrrr/automation-assessment-anytimemailbox/issues"
+  },
+  "homepage": "https://github.com/aldrinogrrrr/automation-assessment-anytimemailbox#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0"
+  }
+}
