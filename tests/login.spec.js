@@ -6,7 +6,7 @@ const { loginTestData } = require('../test-data/sampleTestData.js');
 
 
 
-test.describe('Validate Address or City Search', () => {
+test.describe('Validate Login', () => {
 
     let loginPage;
 
