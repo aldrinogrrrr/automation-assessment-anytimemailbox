@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fritz Aldrin Alabastro — QA Engineer & Tech Lead</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --surface: #111820;
+            --surface2: #1a2535;
+            --accent: #e8c547;
+            --accent2: #4fc3a1;
+            --text: #e8edf5;
+            --muted: #7a8799;
+            --border: rgba(232, 197, 71, 0.15);
+            --card-bg: rgba(26, 37, 53, 0.7);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* NOISE TEXTURE OVERLAY */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.5;
+        }
+
+        /* GRID BACKGROUND */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(232, 197, 71, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(232, 197, 71, 0.03) 1px, transparent 1px);
+            background-size: 48px 48px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(16px);
+            background: rgba(11, 15, 20, 0.85);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s;
+        }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 7rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hero-inner {
+            width: 100%;
+        }
+
+        .hero-eyebrow {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent2);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.2s forwards;
+        }
+
+        .hero-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.35s forwards;
+        }
+
+        .hero-name span {
+            display: block;
+            color: var(--accent);
+        }
+
+        .hero-title {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: var(--muted);
+            font-weight: 300;
+            max-width: 600px;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.5s forwards;
+        }
+
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.65s forwards;
+        }
+
+        .badge {
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(232, 197, 71, 0.05);
+            letter-spacing: 0.08em;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.7s 0.8s forwards;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: all 0.25s;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .btn-primary:hover {
+            background: #f5d55e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(232, 197, 71, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(232, 213, 94, 0.4);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* GLOW ORB */
+        .glow-orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(232, 197, 71, 0.08) 0%, transparent 70%);
+            top: -100px;
+            right: -200px;
+            pointer-events: none;
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* SECTIONS */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 5rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent2);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 3rem;
+            line-height: 1.2;
+        }
+
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            margin: 0 auto;
+            max-width: 1100px;
+        }
+
+        /* ABOUT */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            color: var(--muted);
+            margin-bottom: 1.25rem;
+            font-size: 1.05rem;
+        }
+
+        .about-text p strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent);
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* SKILLS */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-group {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            backdrop-filter: blur(8px);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .skill-group:hover {
+            border-color: rgba(232, 197, 71, 0.4);
+            transform: translateY(-4px);
+        }
+
+        .skill-group-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .skill-group-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent2);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            padding: 0.3rem 0.75rem;
+            background: rgba(79, 195, 161, 0.08);
+            border: 1px solid rgba(79, 195, 161, 0.2);
+            border-radius: 2px;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--accent2);
+        }
+
+        /* EXPERIENCE TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--accent), transparent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.4rem;
+            top: 0.5rem;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg);
+            box-shadow: 0 0 0 3px rgba(232, 197, 71, 0.2);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-role {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .timeline-period {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(232, 197, 71, 0.1);
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .timeline-company {
+            font-size: 0.9rem;
+            color: var(--accent2);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-industry {
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .timeline-bullets li {
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .timeline-bullets li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 0.75rem;
+            top: 3px;
+        }
+
+        /* EDUCATION */
+        .edu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .edu-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 2rem;
+            backdrop-filter: blur(8px);
+            transition: border-color 0.3s;
+        }
+
+        .edu-card:hover {
+            border-color: rgba(232, 197, 71, 0.4);
+        }
+
+        .edu-degree {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .edu-school {
+            color: var(--accent2);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .edu-period {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .edu-note {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .highlight-box {
+            background: rgba(232, 197, 71, 0.05);
+            border-left: 3px solid var(--accent);
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+        }
+
+        /* CERTIFICATIONS */
+        .cert-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .cert-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.5rem;
+            backdrop-filter: blur(8px);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .cert-item:hover {
+            border-color: rgba(232, 197, 71, 0.4);
+            transform: translateX(6px);
+        }
+
+        .cert-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(232, 197, 71, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .cert-name {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* CONTACT */
+        .contact-section {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-inner {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: all 0.25s;
+            backdrop-filter: blur(8px);
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .contact-link-icon {
+            font-size: 1.1rem;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-family: 'DM Mono', monospace;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.05em;
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* MOBILE NAV */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: rgba(11, 15, 20, 0.97);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            z-index: 99;
+            padding: 1.5rem 2rem;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .edu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 6rem;
+            }
+
+            .timeline-header {
+                flex-direction: column;
+            }
+
+            .timeline {
+                padding-left: 1.5rem;
+            }
+
+            .timeline-item::before {
+                left: -1.9rem;
+            }
+
+            section {
+                padding: 3.5rem 1.25rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .skills-container {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-links {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .contact-link {
+                justify-content: center;
+            }
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-logo">Fritz // QA Lead</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" onclick="toggleMenu()">About</a>
+        <a href="#skills" onclick="toggleMenu()">Skills</a>
+        <a href="#experience" onclick="toggleMenu()">Experience</a>
+        <a href="#education" onclick="toggleMenu()">Education</a>
+        <a href="#contact" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <!-- HERO -->
+    <div style="position:relative; overflow:hidden;">
+        <div class="glow-orb"></div>
+        <div class="hero">
+            <div class="hero-inner">
+                <p class="hero-eyebrow">// Available for new opportunities</p>
+                <h1 class="hero-name">
+                    Fritz Aldrin<span>Alabastro</span>
+                </h1>
+                <p class="hero-title">
+                    Software QA Engineer & Agile Project Lead — bridging technical precision with business impact across
+                    9+ years in IT.
+                </p>
+                <div class="hero-badges">
+                    <span class="badge">Playwright</span>
+                    <span class="badge">Selenium</span>
+                    <span class="badge">Azure DevOps</span>
+                    <span class="badge">CI/CD</span>
+                    <span class="badge">Agile / Scrum</span>
+                    <span class="badge">REST API Testing</span>
+                    <span class="badge">MIT — UPLB</span>
+                </div>
+                <div class="hero-cta">
+                    <a href="#experience" class="btn btn-primary">View Experience</a>
+                    <a href="#contact" class="btn btn-outline">Get In Touch</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="fade-in">
+            <p class="section-label">// 01 — About</p>
+            <h2 class="section-title">Quality-first. <br />Client-focused. Always.</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-text fade-in">
+                <p>I'm a technology professional with <strong>nearly a decade of experience</strong> spanning software
+                    quality engineering, IT operations, and client service delivery — working with global organizations
+                    across energy, logistics, insurance, and government sectors.</p>
+                <p>With <strong>4+ years leading QA sprints</strong> and coordinating Agile teams, I specialize in
+                    bridging the gap between technical execution and business needs, ensuring every release is reliable,
+                    compliant, and client-aligned.</p>
+                <p>Currently pursuing my <strong>Master of Information Technology at UPLB</strong>, where I've deepened
+                    my expertise in AI-driven workflows, enterprise systems, and smart data integration through
+                    real-world government-funded projects.</p>
+                <p>I was honored with a <strong>Most Proactive Award</strong> from a client for initiatives that raised
+                    testing efficiency, reduced defects, and improved release accuracy — recognition I'm especially
+                    proud of.</p>
+            </div>
+            <div class="stat-grid fade-in">
+                <div class="stat-card">
+                    <div class="stat-number">9+</div>
+                    <div class="stat-label">Years in IT</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4+</div>
+                    <div class="stat-label">Years in QA Lead</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Companies</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">MIT</div>
+                    <div class="stat-label">UPLB Graduate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- SKILLS -->
+    <section id="skills">
+        <div class="fade-in">
+            <p class="section-label">// 02 — Skills & Tech Stack</p>
+            <h2 class="section-title">Tools of the trade.</h2>
+        </div>
+        <div class="skills-container">
+            <div class="skill-group fade-in">
+                <div class="skill-group-title">Test Automation & QA</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Playwright</span>
+                    <span class="skill-tag">Selenium</span>
+                    <span class="skill-tag">Jasmine</span>
+                    <span class="skill-tag">Cucumber</span>
+                    <span class="skill-tag">Page Object Model</span>
+                    <span class="skill-tag">Test Strategy</span>
+                    <span class="skill-tag">Xray (Jira)</span>
+                    <span class="skill-tag">UAT</span>
+                    <span class="skill-tag">Regression Testing</span>
+                </div>
+            </div>
+            <div class="skill-group fade-in">
+                <div class="skill-group-title">DevOps & CI/CD</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Azure DevOps</span>
+                    <span class="skill-tag">Azure Pipelines</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">GitHub</span>
+                    <span class="skill-tag">CI/CD Pipeline Design</span>
+                </div>
+            </div>
+            <div class="skill-group fade-in">
+                <div class="skill-group-title">API & Data</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">RESTful API Testing</span>
+                    <span class="skill-tag">Postman</span>
+                    <span class="skill-tag">Apifox</span>
+                    <span class="skill-tag">SQL Server</span>
+                    <span class="skill-tag">JSON</span>
+                    <span class="skill-tag">API Swagger</span>
+                </div>
+            </div>
+            <div class="skill-group fade-in">
+                <div class="skill-group-title">Web & UI Development</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">HTML</span>
+                    <span class="skill-tag">CSS</span>
+                    <span class="skill-tag">JavaScript</span>
+                    <span class="skill-tag">TypeScript</span>
+                    <span class="skill-tag">React.js</span>
+                    <span class="skill-tag">React Native</span>
+                    <span class="skill-tag">Figma</span>
+                </div>
+            </div>
+            <div class="skill-group fade-in">
+                <div class="skill-group-title">Agile & Collaboration</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Scrum</span>
+                    <span class="skill-tag">Sprint Management</span>
+                    <span class="skill-tag">Jira</span>
+                    <span class="skill-tag">Confluence</span>
+                    <span class="skill-tag">Defect Triage</span>
+                    <span class="skill-tag">Root Cause Analysis</span>
+                    <span class="skill-tag">Release Management</span>
+                </div>
+            </div>
+            <div class="skill-group fade-in">
+                <div class="skill-group-title">Analytics & Performance</div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Google Analytics</span>
+                    <span class="skill-tag">Performance Testing</span>
+                    <span class="skill-tag">UI/UX Testing</span>
+                    <span class="skill-tag">QA Dashboarding</span>
+                    <span class="skill-tag">Compliance Reporting</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+        <div class="fade-in">
+            <p class="section-label">// 03 — Work Experience</p>
+            <h2 class="section-title">A decade of delivery.</h2>
+        </div>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-role">Software QA Engineer</div>
+                    <div class="timeline-period">Jan 2025 — Present</div>
+                </div>
+                <div class="timeline-company">Agile Technology & Operations</div>
+                <div class="timeline-industry">Technology & IT Services — Environmental Risk & Insurance</div>
+                <ul class="timeline-bullets">
+                    <li>Sole QA expert in an 8-person dev team; took full ownership of system reliability and release
+                        outcomes.</li>
+                    <li>Received client's <strong style="color:var(--accent)">Most Proactive Award</strong> for
+                        improving testing efficiency and release accuracy.</li>
+                    <li>Designed functional & regression test suites using Playwright, Azure DevOps, and SQL.</li>
+                    <li>Implemented CI/CD pipelines with Page Object Model to shorten regression cycles.</li>
+                    <li>Delivered QA dashboards and compliance-ready reports supporting audit prep and leadership
+                        decisions.</li>
+                    <li>Guided developers on automation strategy, requirements analysis, and defect management.</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-role">SQA Engineering Project Lead</div>
+                    <div class="timeline-period">Oct 2024 — Jan 2025</div>
+                </div>
+                <div class="timeline-company">Cubework</div>
+                <div class="timeline-industry">Warehouse & Logistics — Operations Management Systems</div>
+                <ul class="timeline-bullets">
+                    <li>Led QA delivery for enterprise warehouse & logistics platform.</li>
+                    <li>Served as primary QA liaison between client and product teams, accelerating issue resolution.
+                    </li>
+                    <li>Introduced API validation via APIFOX for cross-platform data accuracy.</li>
+                    <li>Mentored junior engineers in QA frameworks and client interaction best practices.</li>
+                    <li>Improved UI/UX validation using Figma, ensuring consistent user experience and client adoption.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-role">Analyst II — Software Engineering</div>
+                    <div class="timeline-period">May 2022 — Oct 2024</div>
+                </div>
+                <div class="timeline-company">DXC Technology GIDC Philippines</div>
+                <div class="timeline-industry">Global IT Services — European Energy Sector / IoT</div>
+                <ul class="timeline-bullets">
+                    <li>Led QA for B2B platforms across APAC and Europe, overseeing sprint delivery and release
+                        validation.</li>
+                    <li>Designed and executed functional & regression tests using Selenium Cucumber.</li>
+                    <li>Managed Azure DevOps pipelines, improving release integrity and delivery efficiency.</li>
+                    <li>Mentored 3–4 junior QA resources during key enterprise implementations.</li>
+                    <li>Collaborated with client stakeholders to refine acceptance criteria aligned with
+                        business-critical workflows.</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-role">IT Quality & Service Management Analyst & Trainer</div>
+                    <div class="timeline-period">Mar 2021 — May 2022</div>
+                </div>
+                <div class="timeline-company">Alorica Philippines</div>
+                <div class="timeline-industry">IT Service Management / BPO</div>
+                <ul class="timeline-bullets">
+                    <li>Performed UAT testing for ServiceNow applications ensuring ITSM compliance.</li>
+                    <li>Trained IT service desk analysts on issue resolution, improving incident response times.</li>
+                    <li>Managed user security and access control protocols.</li>
+                    <li>Led incident tracking and resolution to maintain smooth operations with minimal downtime.</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-role">Technical Support Engineer</div>
+                    <div class="timeline-period">Aug 2020 — Mar 2021</div>
+                </div>
+                <div class="timeline-company">Conduent Philippines</div>
+                <div class="timeline-industry">Enterprise & Consumer Applications</div>
+                <ul class="timeline-bullets">
+                    <li>Provided technical support for enterprise and consumer applications.</li>
+                    <li>Managed critical issue escalation in collaboration with engineering teams.</li>
+                    <li>Assisted in diagnosing software bugs and contributing to product improvement discussions.</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-role">B2B Order Management Specialist</div>
+                    <div class="timeline-period">Jan 2019 — Feb 2020</div>
+                </div>
+                <div class="timeline-company">Alorica Philippines</div>
+                <div class="timeline-industry">Operations</div>
+                <ul class="timeline-bullets">
+                    <li>Enhanced order management workflows with internal IT and operations teams.</li>
+                    <li>Developed and maintained process documentation for operational efficiency.</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <div class="timeline-role">Technical Support Specialist</div>
+                    <div class="timeline-period">Mar 2015 — Jun 2017</div>
+                </div>
+                <div class="timeline-company">Teleperformance Philippines</div>
+                <div class="timeline-industry">Telecommunications</div>
+                <ul class="timeline-bullets">
+                    <li>Assisted customers with technical troubleshooting for phone, internet, and cable services.</li>
+                    <li>Provided hardware and software support, improving customer satisfaction scores.</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- EDUCATION -->
+    <section id="education">
+        <div class="fade-in">
+            <p class="section-label">// 04 — Education</p>
+            <h2 class="section-title">Built on strong foundations.</h2>
+        </div>
+        <div class="edu-grid fade-in">
+            <div class="edu-card">
+                <div class="edu-degree">Master of Information Technology</div>
+                <div class="edu-school">University of the Philippines Los Baños</div>
+                <div class="edu-period">2022 — 2025</div>
+                <div class="edu-note">Advanced knowledge in IT design, implementation, and maintenance — covering MIS
+                    frameworks, enterprise process modeling, and collaborative system integration.</div>
+                <div class="highlight-box">
+                    <strong>Capstone:</strong> WAISS — Water Advisory for Irrigation Scheduling System. A DOST-PCAARRD
+                    government-funded mobile & web platform delivering real-time soil moisture advisories to farmers via
+                    smart sensor networks.
+                </div>
+            </div>
+            <div class="edu-card">
+                <div class="edu-degree">BS Information Technology</div>
+                <div class="edu-school">Adamson University</div>
+                <div class="edu-period">2016 — 2020</div>
+                <div class="edu-note">Comprehensive curriculum covering programming, systems analysis, and network
+                    management — combining theoretical knowledge with hands-on IT industry experience.</div>
+                <div class="highlight-box">
+                    <strong>Focus areas:</strong> Software development, systems analysis, network infrastructure, and
+                    enterprise IT foundations.
+                </div>
+            </div>
+        </div>
+
+        <!-- CERTIFICATIONS -->
+        <div style="margin-top: 3.5rem;" class="fade-in">
+            <p class="section-label">// Certifications</p>
+            <h3 style="font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:1.5rem;">Continuous
+                learning.</h3>
+            <div class="cert-list">
+                <div class="cert-item">
+                    <div class="cert-icon">🤖</div>
+                    <div class="cert-name">Introduction to Prompt Engineering for Generative AI</div>
+                </div>
+                <div class="cert-item">
+                    <div class="cert-icon">💡</div>
+                    <div class="cert-name">What is Generative AI?</div>
+                </div>
+                <div class="cert-item">
+                    <div class="cert-icon">📊</div>
+                    <div class="cert-name">Talkdesk Analyst Certification</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <div class="contact-section" id="contact">
+        <div class="contact-inner fade-in">
+            <p class="section-label" style="text-align:center;">// 05 — Contact</p>
+            <h2 class="section-title" style="text-align:center;">Let's build something <br />reliable together.</h2>
+            <p style="color:var(--muted); max-width:480px; margin:0 auto; font-size:1rem;">
+                Open to QA Engineering, Agile Project Lead, and Software Quality roles. Let's connect and talk about how
+                I can bring quality-first delivery to your team.
+            </p>
+            <div class="contact-links">
+                <a href="mailto:fritzalabastro.17@gmail.com" class="contact-link">
+                    <span class="contact-link-icon">✉️</span>
+                    <span>fritzalabastro.17@gmail.com</span>
+                </a>
+                <a href="tel:+639999605607" class="contact-link">
+                    <span class="contact-link-icon">📱</span>
+                    <span>+63 999 960 5607</span>
+                </a>
+                <a href="https://www.linkedin.com/in/fritz-aldrin-alabastro-86166a1b3/" target="_blank"
+                    class="contact-link">
+                    <span class="contact-link-icon">💼</span>
+                    <span>LinkedIn Profile</span>
+                </a>
+                <a href="https://github.com/aldrinogrrrr/sample-playwright-automation" target="_blank"
+                    class="contact-link">
+                    <span class="contact-link-icon">🐙</span>
+                    <span>GitHub — Playwright Automation</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Fritz Aldrin Alabastro — Software QA Engineer &amp; Agile Project Lead
+    </footer>
+
+    <script>
+        // HAMBURGER MENU
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open');
+        }
+
+        // CLOSE MOBILE MENU ON OUTSIDE CLICK
+        document.addEventListener('click', function (e) {
+            const menu = document.getElementById('mobileMenu');
+            const hamburger = document.querySelector('.hamburger');
+            if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+                menu.classList.remove('open');
+            }
+        });
+
+        // INTERSECTION OBSERVER — FADE IN & TIMELINE
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.fade-in, .timeline-item').forEach(el => observer.observe(el));
+
+        // STAGGER TIMELINE ITEMS
+        document.querySelectorAll('.timeline-item').forEach((item, i) => {
+            item.style.transitionDelay = `${i * 0.08}s`;
+        });
+
+        // STAGGER SKILL GROUPS
+        document.querySelectorAll('.skill-group').forEach((el, i) => {
+            el.style.transitionDelay = `${i * 0.07}s`;
+        });
+
+        // NAV ACTIVE STATE
+        const sections = document.querySelectorAll('section[id], .contact-section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                if (window.scrollY >= section.offsetTop - 120) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.style.color = link.getAttribute('href') === `#${current}` ? 'var(--accent)' : '';
+            });
+        });
+    </script>
+</body>
+
+</html>
