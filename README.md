@@ -24,10 +24,10 @@ I bridge technical execution with business needs: turning acceptance criteria in
 | **API Testing** | Postman, Apifox, REST, Swagger |
 | **CI/CD & DevOps** | Azure DevOps, Azure Pipelines, GitHub Actions, Git |
 | **Languages** | JavaScript, TypeScript, SQL, HTML, CSS |
-| **Project & Test Mgmt** | Jira, Xray, Confluence |
+| **Project & Test Mgmt** | Jira, Xray, Confluence, Azure DevOps |
 | **UI/UX Validation** | Figma, Google Analytics |
 | **Enterprise Platforms** | ServiceNow ITSM, Oracle VMs, Citrix, Active Directory |
-| **Databases** | PostgreSQL, SQL (query optimization, data modeling) |
+| **Databases** | PostgreSQL, SQL |
 
 ---
 
