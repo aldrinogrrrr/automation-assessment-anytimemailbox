@@ -57,11 +57,9 @@ I bridge technical execution with business needs: turning acceptance criteria in
 **Analyst II Software Engineering** — DXC Technology GIDC Philippines *(May 2022 – Oct 2024)*
 > Global IT Services | European Energy Sector / IoT Client
 
-- Led QA and application support for B2B platforms across **APAC and Europe**
+- Led QA and application support for B2B platforms
 - Designed and executed functional and regression test strategies using **Selenium and Cucumber**
-- Managed **Azure DevOps pipelines**, safeguarding release integrity across distributed teams
 - Conducted API, integration, and regression testing to ensure seamless data exchange across enterprise modules
-- Mentored and indirectly supervised **3–4 QA resources** during key implementations
 - Delivered audit-ready defect dashboards integrated into compliance reviews
 
 ---
