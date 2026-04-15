@@ -11,19 +11,23 @@
         href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet" />
     <style>
+        /* ─── TOKENS ─── */
         :root {
             --bg: #09090b;
             --surface: #111115;
             --surface2: #18181e;
-            --border: rgba(255, 255, 255, 0.07);
-            --border-hi: rgba(200, 241, 53, 0.25);
+            --border: rgba(255, 255, 255, .07);
+            --border-hi: rgba(200, 241, 53, .25);
             --lime: #c8f135;
-            --lime-dim: rgba(200, 241, 53, 0.07);
+            --lime-dim: rgba(200, 241, 53, .07);
             --cyan: #67e8f9;
             --text: #efefef;
             --sub: #888898;
             --muted: #52525e;
             --nav-h: 60px;
+            --ease-apple: cubic-bezier(0.25, 0.1, 0.25, 1);
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         *,
@@ -46,17 +50,18 @@
             line-height: 1.65;
             overflow-x: hidden;
             cursor: none;
-            -webkit-font-smoothing: antialiased
+            -webkit-font-smoothing: antialiased;
         }
 
+        /* noise */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
             z-index: 9000;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
             pointer-events: none;
-            opacity: 0.45
+            opacity: .4;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
         }
 
         a {
@@ -64,7 +69,7 @@
             color: inherit
         }
 
-        /* CURSOR */
+        /* ─── CURSOR ─── */
         #cur {
             position: fixed;
             top: 0;
@@ -76,7 +81,7 @@
             background: var(--lime);
             transform: translate(-50%, -50%);
             pointer-events: none;
-            transition: width .18s, height .18s
+            transition: width .2s var(--ease-out), height .2s var(--ease-out), opacity .2s
         }
 
         #cur-ring {
@@ -87,10 +92,10 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            border: 1px solid rgba(200, 241, 53, .35);
+            border: 1px solid rgba(200, 241, 53, .4);
             transform: translate(-50%, -50%);
             pointer-events: none;
-            transition: width .25s, height .25s, border-color .25s
+            transition: width .3s var(--ease-out), height .3s var(--ease-out), border-color .3s, opacity .3s
         }
 
         body.hov #cur {
@@ -101,10 +106,10 @@
         body.hov #cur-ring {
             width: 44px;
             height: 44px;
-            border-color: rgba(200, 241, 53, .6)
+            border-color: rgba(200, 241, 53, .65)
         }
 
-        /* NAV */
+        /* ─── NAV ─── */
         nav {
             position: fixed;
             top: 0;
@@ -116,7 +121,14 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 3rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid transparent;
+            backdrop-filter: blur(0px);
+            background: transparent;
+            transition: border-color .5s, backdrop-filter .5s, background .5s;
+        }
+
+        nav.scrolled {
+            border-color: var(--border);
             backdrop-filter: blur(24px);
             background: rgba(9, 9, 11, .78)
         }
@@ -230,7 +242,7 @@
             color: var(--lime)
         }
 
-        /* LAYOUT */
+        /* ─── LAYOUT ─── */
         .wrap {
             max-width: 1120px;
             margin: 0 auto;
@@ -247,7 +259,6 @@
             background: var(--border)
         }
 
-        /* LABELS */
         .eyebrow {
             font-family: 'JetBrains Mono', monospace;
             font-size: .65rem;
@@ -277,49 +288,150 @@
             margin-bottom: 3rem
         }
 
-        /* REVEAL */
-        .r {
+        /* ─── APPLE SCROLL REVEAL SYSTEM ─── */
+        /* Base: all elements start invisible */
+        .ap {
             opacity: 0;
-            transform: translateY(18px);
-            transition: opacity .65s cubic-bezier(.16, 1, .3, 1), transform .65s cubic-bezier(.16, 1, .3, 1)
+            will-change: opacity, transform
         }
 
-        .r.in {
+        /* Variant 1: Fade + rise (standard sections) */
+        .ap-rise {
+            transform: translateY(40px)
+        }
+
+        .ap-rise.in {
             opacity: 1;
-            transform: translateY(0)
+            transform: translateY(0);
+            transition: opacity .9s var(--ease-out), transform .9s var(--ease-out)
         }
 
-        /* HERO */
+        /* Variant 2: Fade only (subtle) */
+        .ap-fade {
+            transform: none
+        }
+
+        .ap-fade.in {
+            opacity: 1;
+            transition: opacity 1.1s var(--ease-apple)
+        }
+
+        /* Variant 3: Scale from slightly small (hero sections) */
+        .ap-scale {
+            transform: scale(.96) translateY(20px)
+        }
+
+        .ap-scale.in {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            transition: opacity 1s var(--ease-out), transform 1s var(--ease-out)
+        }
+
+        /* Variant 4: Slide from left */
+        .ap-left {
+            transform: translateX(-30px)
+        }
+
+        .ap-left.in {
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity .8s var(--ease-out), transform .8s var(--ease-out)
+        }
+
+        /* Variant 5: Slide from right */
+        .ap-right {
+            transform: translateX(30px)
+        }
+
+        .ap-right.in {
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity .8s var(--ease-out), transform .8s var(--ease-out)
+        }
+
+        /* Stagger children with data-i attribute */
+        [data-i="1"] {
+            transition-delay: .08s !important
+        }
+
+        [data-i="2"] {
+            transition-delay: .16s !important
+        }
+
+        [data-i="3"] {
+            transition-delay: .24s !important
+        }
+
+        [data-i="4"] {
+            transition-delay: .32s !important
+        }
+
+        [data-i="5"] {
+            transition-delay: .40s !important
+        }
+
+        [data-i="6"] {
+            transition-delay: .48s !important
+        }
+
+        [data-i="7"] {
+            transition-delay: .56s !important
+        }
+
+        /* ─── HERO ─── */
         .hero {
             min-height: 100vh;
             padding-top: var(--nav-h);
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden
+            overflow: hidden;
         }
 
-        .hero-glow {
+        /* Cinematic background: multi-layer glow */
+        .hero-bg {
             position: absolute;
-            width: 700px;
-            height: 700px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(200, 241, 53, .045) 0%, transparent 68%);
-            top: 10%;
-            right: -200px;
+            inset: 0;
             pointer-events: none;
-            animation: gd 9s ease-in-out infinite
+            background:
+                radial-gradient(ellipse 80% 50% at 70% 40%, rgba(200, 241, 53, .04) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 60% at 85% 60%, rgba(103, 232, 249, .025) 0%, transparent 55%);
+            animation: hbg 12s ease-in-out infinite;
         }
 
-        @keyframes gd {
+        @keyframes hbg {
 
             0%,
             100% {
-                transform: translateY(0) scale(1)
+                opacity: .7;
+                transform: scale(1)
             }
 
             50% {
-                transform: translateY(-45px) scale(1.06)
+                opacity: 1;
+                transform: scale(1.04)
+            }
+        }
+
+        .hero-grid-bg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image: linear-gradient(rgba(200, 241, 53, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(200, 241, 53, .025) 1px, transparent 1px);
+            background-size: 80px 80px;
+            mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 75%);
+            animation: gridpulse 8s ease-in-out infinite;
+        }
+
+        @keyframes gridpulse {
+
+            0%,
+            100% {
+                opacity: .4
+            }
+
+            50% {
+                opacity: .9
             }
         }
 
@@ -332,16 +444,18 @@
             padding: 3.5rem 3rem 2rem;
             max-width: 1120px;
             margin: 0 auto;
-            width: 100%
+            width: 100%;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Hero meta */
+        /* Hero meta — delayed fade in */
         .hero-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
             opacity: 0;
-            animation: au .8s .15s cubic-bezier(.16, 1, .3, 1) forwards
+            animation: au .9s .1s var(--ease-out) forwards;
         }
 
         .meta-l {
@@ -371,10 +485,10 @@
             line-height: 1.9
         }
 
-        /* Name */
+        /* Hero name — cinematic word reveal */
         .hero-name-wrap {
             opacity: 0;
-            animation: au .9s .3s cubic-bezier(.16, 1, .3, 1) forwards
+            animation: au 1s .25s var(--ease-out) forwards
         }
 
         .hero-name {
@@ -387,6 +501,19 @@
 
         .hero-name .acc {
             color: var(--lime)
+        }
+
+        /* Word-by-word reveal spans (Apple style) */
+        .word-reveal {
+            overflow: hidden;
+            display: inline-block
+        }
+
+        .word-reveal .w {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(105%);
+            animation: wrev .7s var(--ease-out) forwards;
         }
 
         .hero-tag {
@@ -403,7 +530,7 @@
             flex-wrap: wrap;
             gap: .45rem;
             opacity: 0;
-            animation: au .9s .48s cubic-bezier(.16, 1, .3, 1) forwards
+            animation: au .9s .5s var(--ease-out) forwards
         }
 
         .pill {
@@ -414,8 +541,15 @@
             border: 1px solid var(--border);
             color: var(--muted);
             text-transform: uppercase;
-            transition: border-color .2s, color .2s;
+            transition: border-color .25s, color .25s, transform .25s var(--ease-spring), box-shadow .25s;
             border-radius: 2px
+        }
+
+        .pill:hover {
+            border-color: var(--border-hi);
+            color: var(--lime);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(200, 241, 53, .12)
         }
 
         .pill.hi {
@@ -434,7 +568,7 @@
             padding-top: 1.75rem;
             border-top: 1px solid var(--border);
             opacity: 0;
-            animation: au .9s .62s cubic-bezier(.16, 1, .3, 1) forwards
+            animation: au .9s .65s var(--ease-out) forwards
         }
 
         .hero-stats {
@@ -472,8 +606,10 @@
             align-items: center;
             gap: .45rem;
             padding: 0 3rem 2rem;
+            position: relative;
+            z-index: 1;
             opacity: 0;
-            animation: au .9s .78s cubic-bezier(.16, 1, .3, 1) forwards
+            animation: au .9s .85s var(--ease-out) forwards
         }
 
         .scroll-hint span {
@@ -517,6 +653,13 @@
             }
         }
 
+        @keyframes wrev {
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
         /* BTNS */
         .btn {
             font-family: 'JetBrains Mono', monospace;
@@ -524,13 +667,13 @@
             letter-spacing: .1em;
             text-transform: uppercase;
             cursor: none;
-            padding: .72rem 1.5rem;
+            padding: .75rem 1.6rem;
             border: none;
             border-radius: 2px;
             display: inline-flex;
             align-items: center;
             gap: .35rem;
-            transition: all .22s cubic-bezier(.16, 1, .3, 1)
+            transition: all .3s var(--ease-spring)
         }
 
         .btn-lime {
@@ -541,8 +684,8 @@
 
         .btn-lime:hover {
             background: #d9ff50;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(200, 241, 53, .2)
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(200, 241, 53, .25)
         }
 
         .btn-ghost {
@@ -554,7 +697,7 @@
         .btn-ghost:hover {
             border-color: var(--border-hi);
             color: var(--lime);
-            transform: translateY(-2px)
+            transform: translateY(-3px)
         }
 
         /* MARQUEE */
@@ -620,7 +763,7 @@
             padding: 2rem 2.25rem;
             position: relative;
             overflow: hidden;
-            transition: background .3s
+            transition: background .4s var(--ease-apple)
         }
 
         .bc:hover {
@@ -742,7 +885,7 @@
             align-items: center;
             padding: 1.4rem 0;
             border-bottom: 1px solid var(--border);
-            transition: background .2s, padding-left .25s cubic-bezier(.16, 1, .3, 1)
+            transition: background .3s var(--ease-apple), padding-left .35s var(--ease-out);
         }
 
         .skill-row:first-child {
@@ -750,7 +893,7 @@
         }
 
         .skill-row:hover {
-            background: rgba(255, 255, 255, .01);
+            background: rgba(255, 255, 255, .012);
             padding-left: .5rem
         }
 
@@ -783,12 +926,13 @@
             color: var(--muted);
             text-transform: uppercase;
             border-radius: 2px;
-            transition: all .15s
+            transition: border-color .2s, color .2s, transform .2s var(--ease-spring)
         }
 
         .stag:hover {
             border-color: var(--border-hi);
-            color: var(--lime)
+            color: var(--lime);
+            transform: translateY(-1px)
         }
 
         .stag.hi {
@@ -805,7 +949,7 @@
             padding: 2.25rem 0;
             border-bottom: 1px solid var(--border);
             align-items: start;
-            transition: padding-left .28s cubic-bezier(.16, 1, .3, 1)
+            transition: padding-left .35s var(--ease-out);
         }
 
         .exp-item:first-child {
@@ -813,7 +957,7 @@
         }
 
         .exp-item:hover {
-            padding-left: .65rem
+            padding-left: .75rem
         }
 
         .exp-period {
@@ -917,7 +1061,7 @@
             padding: 2.25rem;
             position: relative;
             overflow: hidden;
-            transition: background .3s
+            transition: background .4s var(--ease-apple)
         }
 
         .edu-card:hover {
@@ -1010,7 +1154,7 @@
         .cert-card {
             background: var(--surface);
             padding: 1.75rem;
-            transition: background .3s
+            transition: background .4s var(--ease-apple), transform .3s var(--ease-spring)
         }
 
         .cert-card:hover {
@@ -1096,7 +1240,7 @@
             padding: 1.05rem 0;
             border-bottom: 1px solid var(--border);
             color: var(--sub);
-            transition: color .2s, padding-left .25s cubic-bezier(.16, 1, .3, 1);
+            transition: color .25s, padding-left .35s var(--ease-out);
             cursor: none
         }
 
@@ -1125,7 +1269,11 @@
 
         .cl-arrow {
             color: var(--muted);
-            transition: color .2s
+            transition: color .25s, transform .3s var(--ease-spring)
+        }
+
+        .clink:hover .cl-arrow {
+            transform: translate(3px, -3px)
         }
 
         /* FOOTER */
@@ -1148,7 +1296,33 @@
             color: var(--lime)
         }
 
-        /* RESPONSIVE */
+        /* ─── APPLE SECTION TRANSITIONS ─── */
+        /* Each section has a "sticky reveal" feel — content lifts and locks */
+        .section-wrap {
+            position: relative
+        }
+
+        /* Full-bleed accent line that draws in on reveal */
+        .section-line {
+            position: absolute;
+            top: 0;
+            left: 3rem;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--lime), transparent);
+            transition: width 1.2s var(--ease-out);
+        }
+
+        .section-line.in {
+            width: calc(100% - 6rem)
+        }
+
+        /* Parallax wrapper for inner content depth */
+        .parallax-inner {
+            transition: transform .1s linear
+        }
+
+        /* ─── RESPONSIVE ─── */
         @media(max-width:900px) {
 
             .wrap,
@@ -1222,6 +1396,14 @@
                 text-align: center;
                 padding: 1.1rem 1.5rem
             }
+
+            .section-line {
+                left: 1.5rem
+            }
+
+            .section-line.in {
+                width: calc(100% - 3rem)
+            }
         }
 
         @media(max-width:560px) {
@@ -1248,7 +1430,7 @@
     <div id="cur-ring"></div>
 
     <!-- NAV -->
-    <nav>
+    <nav id="nav">
         <div class="nav-logo">FA — 2025</div>
         <ul class="nav-links">
             <li><a href="#about">Profile</a></li>
@@ -1271,9 +1453,10 @@
         <a href="#contact" onclick="cm()">Contact</a>
     </div>
 
-    <!-- HERO -->
+    <!-- ═══ HERO ═══ -->
     <div class="hero">
-        <div class="hero-glow"></div>
+        <div class="hero-bg"></div>
+        <div class="hero-grid-bg"></div>
 
         <div class="hero-body">
             <div class="hero-meta">
@@ -1282,9 +1465,18 @@
             </div>
 
             <div class="hero-name-wrap">
-                <h1 class="hero-name">Fritz Aldrin<br /><span class="acc">Alabastro.</span></h1>
-                <p class="hero-tag">Quality engineer with 4+ years shipping reliable
-                    software across energy, logistics, insurance, and government sectors.</p>
+                <h1 class="hero-name">
+                    <span class="word-reveal"><span class="w" style="animation-delay:.3s">Fritz</span></span>
+                    <span class="word-reveal"><span class="w"
+                            style="animation-delay:.42s">&nbsp;Aldrin</span></span><br />
+                    <span class="acc">
+                        <span class="word-reveal"><span class="w" style="animation-delay:.56s">Alabastro.</span></span>
+                    </span>
+                </h1>
+                <p class="hero-tag" style="opacity:0;animation:au .9s .72s var(--ease-out) forwards">
+                    Quality engineer with 4+ years shipping reliable software across energy, logistics, insurance, and
+                    government sectors.
+                </p>
             </div>
 
             <div class="hero-pills">
@@ -1360,15 +1552,16 @@
         </div>
     </div>
 
-    <!-- ABOUT -->
-    <section id="about">
+    <!-- ═══ ABOUT ═══ -->
+    <section id="about" class="section-wrap">
+        <div class="section-line" id="sl-about"></div>
         <div class="wrap">
-            <div class="r">
+            <div class="ap ap-rise">
                 <p class="eyebrow">01 — Profile</p>
                 <h2 class="sec-title">Quality-first.<br />Always.</h2>
             </div>
-            <div class="bento r">
-                <div class="bc bc-7">
+            <div class="bento">
+                <div class="bc bc-7 ap ap-rise" data-i="1">
                     <div class="bc-lbl">Background</div>
                     <p>A technology professional with <strong>nearly a decade of experience</strong> spanning software
                         quality engineering, IT operations, and client service delivery — working with global
@@ -1379,30 +1572,30 @@
                     <p>I completed my <strong>Master of Information Technology at UPLB</strong> and led a DOST-PCAARRD
                         government-funded research platform as my capstone project.</p>
                 </div>
-                <div class="bc bc-5">
+                <div class="bc bc-5 ap ap-rise" data-i="2">
                     <div class="bc-lbl">Recognition</div>
                     <div class="award-pill"><span class="star">★</span><span>Most Proactive Award</span></div>
                     <p>Awarded by client at Agile Technology &amp; Operations for <strong>raising testing efficiency,
                             reducing defects, and improving release accuracy</strong> — recognition that happens when
                         someone cares too much about the product to let it ship broken.</p>
                 </div>
-                <div class="bc bc-4">
+                <div class="bc bc-4 ap ap-scale" data-i="3">
                     <div class="bc-lbl">Total Experience</div>
                     <div class="bc-num">5+ <small>yrs</small></div>
                     <div class="bc-nsub">Spanning tech support,<br />ITSM, and QA engineering.</div>
                     <div class="bc-corner">Since 2015</div>
                 </div>
-                <div class="bc bc-4">
+                <div class="bc bc-4 ap ap-scale" data-i="4">
                     <div class="bc-lbl">QA Focus</div>
                     <div class="bc-num" style="color:var(--cyan)">4+ <small>yrs</small></div>
                     <div class="bc-nsub">Leading test strategy,<br />automation &amp; delivery.</div>
                 </div>
-                <div class="bc bc-4">
+                <div class="bc bc-4 ap ap-scale" data-i="5">
                     <div class="bc-lbl">Degree</div>
                     <div class="bc-num" style="font-size:2rem">MIT</div>
                     <div class="bc-nsub">University of the Philippines<br />Los Baños — 2025</div>
                 </div>
-                <div class="bc bc-8">
+                <div class="bc bc-8 ap ap-rise" data-i="6">
                     <div class="bc-lbl">Philosophy</div>
                     <div class="bc-quote">"Quality isn't a phase in the SDLC.<br />It's the whole point."</div>
                 </div>
@@ -1412,14 +1605,15 @@
 
     <div class="divider"></div>
 
-    <!-- SKILLS -->
-    <section id="skills" class="skills-bg">
+    <!-- ═══ SKILLS ═══ -->
+    <section id="skills" class="skills-bg section-wrap">
+        <div class="section-line" id="sl-skills"></div>
         <div class="wrap">
-            <div class="r">
+            <div class="ap ap-rise">
                 <p class="eyebrow">02 — Tech Stack</p>
                 <h2 class="sec-title">Tools of<br />the trade.</h2>
             </div>
-            <div class="r">
+            <div class="ap ap-fade">
                 <div class="skill-row">
                     <div class="sk-code">Automation</div>
                     <div class="sk-name">QA &amp; Testing</div>
@@ -1470,15 +1664,16 @@
 
     <div class="divider"></div>
 
-    <!-- EXPERIENCE -->
-    <section id="experience">
+    <!-- ═══ EXPERIENCE ═══ -->
+    <section id="experience" class="section-wrap">
+        <div class="section-line" id="sl-exp"></div>
         <div class="wrap">
-            <div class="r">
+            <div class="ap ap-rise">
                 <p class="eyebrow">03 — Work History</p>
                 <h2 class="sec-title">A decade<br />of delivery.</h2>
             </div>
 
-            <div class="exp-item r">
+            <div class="exp-item ap ap-left">
                 <div class="exp-period">
                     <div class="exp-now"><span class="now-dot"></span>Present</div>Jan 2025
                 </div>
@@ -1501,7 +1696,7 @@
                 <div class="exp-n">01</div>
             </div>
 
-            <div class="exp-item r">
+            <div class="exp-item ap ap-left">
                 <div class="exp-period">Jan 2025<br />Oct 2024</div>
                 <div>
                     <div class="exp-role">SQA Engineering Project Lead</div>
@@ -1519,7 +1714,7 @@
                 <div class="exp-n">02</div>
             </div>
 
-            <div class="exp-item r">
+            <div class="exp-item ap ap-left">
                 <div class="exp-period">Oct 2024<br />May 2022</div>
                 <div>
                     <div class="exp-role">Analyst II — Software Engineering</div>
@@ -1536,7 +1731,7 @@
                 <div class="exp-n">03</div>
             </div>
 
-            <div class="exp-item r">
+            <div class="exp-item ap ap-left">
                 <div class="exp-period">May 2022<br />Mar 2021</div>
                 <div>
                     <div class="exp-role">IT Quality &amp; Service Management Analyst &amp; Trainer</div>
@@ -1553,7 +1748,7 @@
                 <div class="exp-n">04</div>
             </div>
 
-            <div class="exp-item r">
+            <div class="exp-item ap ap-left">
                 <div class="exp-period">Mar 2021<br />Aug 2020</div>
                 <div>
                     <div class="exp-role">Technical Support Engineer</div>
@@ -1567,7 +1762,7 @@
                 <div class="exp-n">05</div>
             </div>
 
-            <div class="exp-item r">
+            <div class="exp-item ap ap-left">
                 <div class="exp-period">Feb 2020<br />Jan 2019</div>
                 <div>
                     <div class="exp-role">B2B Order Management Specialist</div>
@@ -1581,7 +1776,7 @@
                 <div class="exp-n">06</div>
             </div>
 
-            <div class="exp-item r">
+            <div class="exp-item ap ap-left">
                 <div class="exp-period">Jun 2017<br />Mar 2015</div>
                 <div>
                     <div class="exp-role">Technical Support Specialist</div>
@@ -1599,16 +1794,16 @@
 
     <div class="divider"></div>
 
-    <!-- EDUCATION -->
-    <section id="education">
+    <!-- ═══ EDUCATION ═══ -->
+    <section id="education" class="section-wrap">
+        <div class="section-line" id="sl-edu"></div>
         <div class="wrap">
-            <div class="r">
+            <div class="ap ap-rise">
                 <p class="eyebrow">04 — Education</p>
                 <h2 class="sec-title">Built on strong<br />foundations.</h2>
             </div>
-
-            <div class="edu-grid r">
-                <div class="edu-card">
+            <div class="edu-grid">
+                <div class="edu-card ap ap-left" data-i="1">
                     <span class="edu-tag">Graduate</span>
                     <div class="edu-deg">Master of<br />Information Technology</div>
                     <div class="edu-sch">University of the Philippines Los Baños</div>
@@ -1620,7 +1815,7 @@
                         moisture advisories to farmers via smart sensor networks.</div>
                     <div class="edu-ghost">25</div>
                 </div>
-                <div class="edu-card">
+                <div class="edu-card ap ap-right" data-i="2">
                     <span class="edu-tag">Undergraduate</span>
                     <div class="edu-deg">BS Information<br />Technology</div>
                     <div class="edu-sch">Adamson University</div>
@@ -1632,19 +1827,18 @@
                     <div class="edu-ghost">20</div>
                 </div>
             </div>
-
-            <div class="r">
+            <div class="ap ap-rise">
                 <p class="eyebrow cert-ey">Certifications</p>
                 <div class="cert-grid">
-                    <div class="cert-card"><span class="cert-ico">🤖</span>
+                    <div class="cert-card ap ap-scale" data-i="1"><span class="cert-ico">🤖</span>
                         <div class="cert-name">Intro to Prompt Engineering for Generative AI</div>
                         <div class="cert-iss">LinkedIn Learning</div>
                     </div>
-                    <div class="cert-card"><span class="cert-ico">💡</span>
+                    <div class="cert-card ap ap-scale" data-i="2"><span class="cert-ico">💡</span>
                         <div class="cert-name">What is Generative AI?</div>
                         <div class="cert-iss">LinkedIn Learning</div>
                     </div>
-                    <div class="cert-card"><span class="cert-ico">📊</span>
+                    <div class="cert-card ap ap-scale" data-i="3"><span class="cert-ico">📊</span>
                         <div class="cert-name">Talkdesk Analyst Certification</div>
                         <div class="cert-iss">Talkdesk Academy</div>
                     </div>
@@ -1653,17 +1847,18 @@
         </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" class="contact-section">
+    <!-- ═══ CONTACT ═══ -->
+    <section id="contact" class="contact-section section-wrap">
+        <div class="section-line" id="sl-contact"></div>
         <div class="ct-ghost">LET'S TALK</div>
         <div class="wrap">
-            <div class="r">
+            <div class="ap ap-rise">
                 <p class="eyebrow">05 — Contact</p>
                 <h2 class="ct-title">Let's build something<br /><em>reliable</em> together.</h2>
                 <p class="ct-sub">Open to QA Engineering, Agile Project Lead, and Software Quality roles. Let's talk
                     about how quality-first delivery can make your product better.</p>
             </div>
-            <div class="clinks r">
+            <div class="clinks ap ap-rise">
                 <a href="mailto:fritzalabastro.17@gmail.com" class="clink">
                     <div>
                         <div class="cl-lbl">Email</div>
@@ -1699,38 +1894,88 @@
     </footer>
 
     <script>
-        /* Cursor */
+        /* ─── CURSOR ─── */
         const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
         let mx = 0, my = 0, rx = 0, ry = 0;
         document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px' });
-        (function L() { rx += (mx - rx) * .1; ry += (my - ry) * .1; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(L) })();
-        document.querySelectorAll('a,button,.bc,.skill-row,.exp-item,.edu-card,.cert-card,.clink').forEach(el => {
+        (function L() { rx += (mx - rx) * .09; ry += (my - ry) * .09; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(L) })();
+        document.querySelectorAll('a,button,.bc,.skill-row,.exp-item,.edu-card,.cert-card,.clink,.pill').forEach(el => {
             el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
             el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
         });
 
-        /* Mobile nav */
+        /* ─── MOBILE NAV ─── */
         const mob = document.getElementById('mob');
         document.getElementById('hbg').addEventListener('click', () => mob.classList.toggle('open'));
         function cm() { mob.classList.remove('open') }
 
-        /* Scroll reveal with stagger for exp items */
-        const io = new IntersectionObserver(entries => {
+        /* ─── NAV SCROLL GLASS ─── */
+        const navEl = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            navEl.classList.toggle('scrolled', window.scrollY > 60);
+        }, { passive: true });
+
+        /* ─── APPLE SCROLL REVEAL ENGINE ─── */
+        // Collect all .ap elements
+        const apEls = document.querySelectorAll('.ap');
+
+        // Also collect section lines
+        const sectionLines = document.querySelectorAll('.section-line');
+
+        const apIO = new IntersectionObserver(entries => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
-                    const d = +(e.target.dataset.d || 0);
-                    setTimeout(() => e.target.classList.add('in'), d);
-                    io.unobserve(e.target);
+                    const delay = parseFloat(e.target.dataset.i || 0) * 0.085;
+                    // Apply delay dynamically via inline style
+                    e.target.style.transitionDelay = delay + 's';
+                    e.target.classList.add('in');
+                    apIO.unobserve(e.target);
                 }
             });
-        }, { threshold: .08, rootMargin: '0px 0px -55px 0px' });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-        document.querySelectorAll('.r').forEach((el, i) => {
-            if (el.classList.contains('exp-item')) el.dataset.d = i * 45;
-            io.observe(el);
-        });
+        apEls.forEach(el => apIO.observe(el));
 
-        /* Nav active */
+        // Section line IO
+        const lineIO = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) { e.target.classList.add('in'); lineIO.unobserve(e.target) }
+            });
+        }, { threshold: 0.2 });
+        sectionLines.forEach(l => lineIO.observe(l));
+
+        /* ─── APPLE-STYLE PARALLAX ─── */
+        // Subtle parallax on bento cards and section headings
+        // Only run on non-touch devices
+        if (!window.matchMedia('(hover: none)').matches) {
+            const parallaxEls = document.querySelectorAll('.bc,.edu-card,.cert-card');
+
+            window.addEventListener('scroll', () => {
+                const sy = window.scrollY;
+                parallaxEls.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    const vy = window.innerHeight;
+                    if (rect.top < vy && rect.bottom > 0) {
+                        // Normalize position: 0 at top of viewport, 1 at bottom
+                        const progress = (vy - rect.top) / (vy + rect.height);
+                        const shift = (progress - .5) * 18; // ±9px
+                        el.style.transform = `translateY(${-shift * .3}px)`;
+                    }
+                });
+            }, { passive: true });
+        }
+
+        /* ─── SMOOTH SCROLL PROGRESS ─── */
+        // Apple's scroll progress bar across the top
+        const prog = document.createElement('div');
+        prog.style.cssText = 'position:fixed;top:0;left:0;z-index:9999;height:1px;background:var(--lime);width:0%;transition:width .05s linear;pointer-events:none';
+        document.body.appendChild(prog);
+        window.addEventListener('scroll', () => {
+            const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+            prog.style.width = pct + '%';
+        }, { passive: true });
+
+        /* ─── NAV ACTIVE ─── */
         const secs = document.querySelectorAll('section[id]');
         const nls = document.querySelectorAll('.nav-links a');
         window.addEventListener('scroll', () => {
@@ -1738,6 +1983,41 @@
             secs.forEach(s => { if (window.scrollY >= s.offsetTop - 100) c = s.id });
             nls.forEach(a => a.classList.toggle('act', a.getAttribute('href') === '#' + c));
         }, { passive: true });
+
+        /* ─── MAGNETIC BUTTONS ─── */
+        // Apple-style magnetic pull on CTA buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const r = btn.getBoundingClientRect();
+                const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+                const dx = (e.clientX - cx) * .25, dy = (e.clientY - cy) * .25;
+                btn.style.transform = `translate(${dx}px,${dy - 3}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+            });
+        });
+
+        /* ─── SKILL ROW STAGGER ─── */
+        // Each skill row gets a slightly different reveal timing
+        document.querySelectorAll('.skill-row').forEach((row, i) => {
+            const stagger = i * 0.07;
+            const io2 = new IntersectionObserver(entries => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        setTimeout(() => {
+                            e.target.style.opacity = '1';
+                            e.target.style.transform = 'translateY(0)';
+                        }, stagger * 1000);
+                        io2.unobserve(e.target);
+                    }
+                });
+            }, { threshold: .1 });
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(12px)';
+            row.style.transition = `opacity .6s cubic-bezier(0.16,1,0.3,1), transform .6s cubic-bezier(0.16,1,0.3,1)`;
+            io2.observe(row);
+        });
     </script>
 </body>
 
