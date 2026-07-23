@@ -1322,6 +1322,315 @@
             transition: transform .1s linear
         }
 
+        /* ─── SAMPLES ─── */
+        .samples-bg {
+            background: var(--surface)
+        }
+
+        .sample-sub {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.4rem
+        }
+
+        .sample-sub-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -.01em
+        }
+
+        .std-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .58rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--lime);
+            border: 1px solid var(--border-hi);
+            background: var(--lime-dim);
+            padding: .28rem .65rem;
+            border-radius: 2px;
+            white-space: nowrap
+        }
+
+        .doc-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 3.25rem
+        }
+
+        .doc-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: .75rem;
+            padding: 1.1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2)
+        }
+
+        .doc-head-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .68rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--text)
+        }
+
+        .doc-head-title span {
+            color: var(--muted)
+        }
+
+        .doc-badges {
+            display: flex;
+            gap: .4rem;
+            flex-wrap: wrap
+        }
+
+        .badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .56rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            padding: .22rem .55rem;
+            border-radius: 2px;
+            border: 1px solid var(--border)
+        }
+
+        .badge.high {
+            color: #ff8a8a;
+            border-color: rgba(255, 138, 138, .3);
+            background: rgba(255, 138, 138, .06)
+        }
+
+        .badge.med {
+            color: #ffcf6b;
+            border-color: rgba(255, 207, 107, .3);
+            background: rgba(255, 207, 107, .06)
+        }
+
+        .badge.lime {
+            color: var(--lime);
+            border-color: var(--border-hi);
+            background: var(--lime-dim)
+        }
+
+        .badge.cyan {
+            color: var(--cyan);
+            border-color: rgba(103, 232, 249, .3);
+            background: rgba(103, 232, 249, .06)
+        }
+
+        /* Test case field table */
+        .tc-table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        .tc-table tr {
+            border-bottom: 1px solid var(--border)
+        }
+
+        .tc-table tr:last-child {
+            border-bottom: none
+        }
+
+        .tc-table td {
+            padding: .95rem 1.5rem;
+            font-size: .82rem;
+            color: var(--sub);
+            vertical-align: top;
+            line-height: 1.6
+        }
+
+        .tc-table td.tc-k {
+            width: 190px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .6rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding-top: 1.05rem
+        }
+
+        .tc-table td.tc-v strong {
+            color: var(--text)
+        }
+
+        .tc-steps {
+            list-style: none;
+            counter-reset: step;
+            display: flex;
+            flex-direction: column;
+            gap: .55rem
+        }
+
+        .tc-steps li {
+            counter-increment: step;
+            padding-left: 1.6rem;
+            position: relative
+        }
+
+        .tc-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--lime-dim);
+            border: 1px solid var(--border-hi);
+            color: var(--lime);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        /* Bug report layout */
+        .bug-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0
+        }
+
+        .bug-cell {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border)
+        }
+
+        .bug-cell:nth-child(2n) {
+            border-right: none
+        }
+
+        .bug-cell.full {
+            grid-column: span 2;
+            border-right: none
+        }
+
+        .bug-k {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .58rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: .5rem
+        }
+
+        .bug-v {
+            font-size: .82rem;
+            color: var(--sub);
+            line-height: 1.65
+        }
+
+        .bug-v strong {
+            color: var(--text)
+        }
+
+        .bug-v.actual {
+            color: #ff9d9d
+        }
+
+        .bug-v.expected {
+            color: var(--lime)
+        }
+
+        .bug-steps {
+            list-style: decimal;
+            padding-left: 1.1rem;
+            display: flex;
+            flex-direction: column;
+            gap: .35rem;
+            font-size: .82rem;
+            color: var(--sub);
+            line-height: 1.6
+        }
+
+        /* Project cards */
+        .proj-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden
+        }
+
+        .proj-card {
+            background: var(--bg);
+            padding: 1.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: background .35s var(--ease-apple), transform .3s var(--ease-spring);
+            cursor: none
+        }
+
+        .proj-card:hover {
+            background: var(--surface2);
+            transform: translateY(-3px)
+        }
+
+        .proj-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .6rem;
+            color: var(--muted);
+            letter-spacing: .1em
+        }
+
+        .proj-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1.3
+        }
+
+        .proj-desc {
+            font-size: .78rem;
+            color: var(--sub);
+            line-height: 1.65;
+            flex: 1
+        }
+
+        .proj-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .35rem
+        }
+
+        .proj-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .6rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: var(--lime);
+            padding-top: .9rem;
+            border-top: 1px solid var(--border);
+            margin-top: .2rem
+        }
+
+        .proj-link .cl-arrow {
+            color: var(--lime);
+            transition: transform .3s var(--ease-spring)
+        }
+
+        .proj-card:hover .proj-link .cl-arrow {
+            transform: translate(3px, -3px)
+        }
+
         /* ─── RESPONSIVE ─── */
         @media(max-width:900px) {
 
@@ -1390,6 +1699,26 @@
                 grid-template-columns: 1fr
             }
 
+            .tc-table td.tc-k {
+                width: 130px
+            }
+
+            .bug-grid {
+                grid-template-columns: 1fr
+            }
+
+            .bug-cell {
+                border-right: none
+            }
+
+            .bug-cell.full {
+                grid-column: span 1
+            }
+
+            .proj-grid {
+                grid-template-columns: 1fr
+            }
+
             footer {
                 flex-direction: column;
                 gap: .35rem;
@@ -1420,6 +1749,16 @@
                 grid-template-columns: 1fr;
                 gap: .6rem
             }
+
+            .tc-table tr {
+                display: flex;
+                flex-direction: column
+            }
+
+            .tc-table td.tc-k {
+                width: auto;
+                padding-bottom: .2rem
+            }
         }
     </style>
 </head>
@@ -1437,6 +1776,7 @@
             <li><a href="#skills">Stack</a></li>
             <li><a href="#experience">Work</a></li>
             <li><a href="#education">Education</a></li>
+            <li><a href="#samples">Samples</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
         <div class="nav-status">
@@ -1450,6 +1790,7 @@
         <a href="#skills" onclick="cm()">Stack</a>
         <a href="#experience" onclick="cm()">Work</a>
         <a href="#education" onclick="cm()">Education</a>
+        <a href="#samples" onclick="cm()">Samples</a>
         <a href="#contact" onclick="cm()">Contact</a>
     </div>
 
@@ -1862,6 +2203,223 @@
                         <div class="cert-name">Talkdesk Analyst Certification</div>
                         <div class="cert-iss">Talkdesk Academy</div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══ WORK SAMPLES ═══ -->
+    <section id="samples" class="samples-bg section-wrap">
+        <div class="section-line" id="sl-samples"></div>
+        <div class="wrap">
+            <div class="ap ap-rise">
+                <p class="eyebrow">06 — Work Samples</p>
+                <h2 class="sec-title">Documentation<br />you can trust.</h2>
+            </div>
+
+            <!-- SAMPLE TEST CASE -->
+            <div class="ap ap-rise" data-i="1">
+                <div class="sample-sub">
+                    <div class="sample-sub-title">Sample Test Case</div>
+                    <div class="std-tag">ISTQB / IEEE 829 Format</div>
+                </div>
+                <div class="doc-card">
+                    <div class="doc-head">
+                        <div class="doc-head-title">TC-LOGIN-001 <span>— Verify successful login with valid credentials</span></div>
+                        <div class="doc-badges">
+                            <span class="badge lime">Priority: High</span>
+                            <span class="badge cyan">Type: Functional</span>
+                        </div>
+                    </div>
+                    <table class="tc-table">
+                        <tr>
+                            <td class="tc-k">Test Case ID</td>
+                            <td class="tc-v">TC-LOGIN-001</td>
+                        </tr>
+                        <tr>
+                            <td class="tc-k">Module / Feature</td>
+                            <td class="tc-v">Authentication — Login</td>
+                        </tr>
+                        <tr>
+                            <td class="tc-k">Objective</td>
+                            <td class="tc-v">Verify that a registered user can successfully log in to the application
+                                using valid username and password credentials.</td>
+                        </tr>
+                        <tr>
+                            <td class="tc-k">Preconditions</td>
+                            <td class="tc-v">
+                                <ul class="bug-steps">
+                                    <li>User has a registered, active account.</li>
+                                    <li>Application login page is accessible.</li>
+                                    <li>Test environment (Staging) is up and reachable.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tc-k">Test Data</td>
+                            <td class="tc-v"><strong>Username:</strong> standard_user@example.com<br /><strong>Password:</strong>
+                                ValidPass123!</td>
+                        </tr>
+                        <tr>
+                            <td class="tc-k">Test Steps</td>
+                            <td class="tc-v">
+                                <ol class="tc-steps">
+                                    <li>Navigate to the application login page.</li>
+                                    <li>Enter a valid registered email in the "Username" field.</li>
+                                    <li>Enter the correct corresponding password in the "Password" field.</li>
+                                    <li>Click the "Log In" button.</li>
+                                </ol>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="tc-k">Expected Result</td>
+                            <td class="tc-v">User is redirected to the account dashboard within 3 seconds. A welcome
+                                message displaying the user's name is visible, and the session is authenticated.</td>
+                        </tr>
+                        <tr>
+                            <td class="tc-k">Postconditions</td>
+                            <td class="tc-v">User remains logged in until session timeout or manual logout.</td>
+                        </tr>
+                        <tr>
+                            <td class="tc-k">Priority / Severity</td>
+                            <td class="tc-v">High — core authentication flow, blocks all downstream functionality if
+                                broken.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SAMPLE BUG REPORT -->
+            <div class="ap ap-rise" data-i="2">
+                <div class="sample-sub">
+                    <div class="sample-sub-title">Sample Bug Report</div>
+                    <div class="std-tag">ISTQB Defect Report Standard</div>
+                </div>
+                <div class="doc-card">
+                    <div class="doc-head">
+                        <div class="doc-head-title">BUG-0042 <span>— Login fails silently with valid credentials on Safari</span></div>
+                        <div class="doc-badges">
+                            <span class="badge high">Severity: High</span>
+                            <span class="badge med">Priority: P2</span>
+                        </div>
+                    </div>
+                    <div class="bug-grid">
+                        <div class="bug-cell">
+                            <div class="bug-k">Bug ID</div>
+                            <div class="bug-v">BUG-0042</div>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Reported By / Date</div>
+                            <div class="bug-v">Fritz A. Alabastro — 2026-06-15</div>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Environment</div>
+                            <div class="bug-v">Staging · macOS Sonoma · Safari 17.4 · Desktop</div>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Build / Version</div>
+                            <div class="bug-v">v2.14.0-staging</div>
+                        </div>
+                        <div class="bug-cell full">
+                            <div class="bug-k">Summary</div>
+                            <div class="bug-v"><strong>Login form does not respond when submitted with valid
+                                    credentials in Safari</strong> — no navigation, no error message, and no console
+                                feedback, leaving the user stuck on the login page with no explanation.</div>
+                        </div>
+                        <div class="bug-cell full">
+                            <div class="bug-k">Steps to Reproduce</div>
+                            <ol class="bug-steps">
+                                <li>Open the application login page in Safari 17.4 on macOS.</li>
+                                <li>Enter a valid registered email and correct password.</li>
+                                <li>Click the "Log In" button.</li>
+                                <li>Observe the page behavior.</li>
+                            </ol>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Actual Result</div>
+                            <div class="bug-v actual">Page remains on the login screen. No redirect, no error
+                                message, no loading indicator. The "Log In" button appears clickable again with no
+                                visible feedback.</div>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Expected Result</div>
+                            <div class="bug-v expected">User should be redirected to the dashboard within 3 seconds,
+                                consistent with behavior already confirmed on Chrome and Firefox.</div>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Severity</div>
+                            <div class="bug-v">High — blocks core login functionality for all Safari users.</div>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Priority</div>
+                            <div class="bug-v">P2 — affects a specific browser segment; workaround (Chrome/Firefox)
+                                exists.</div>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Reproducibility</div>
+                            <div class="bug-v">100% — consistently reproducible on Safari across 3 test attempts.</div>
+                        </div>
+                        <div class="bug-cell">
+                            <div class="bug-k">Status</div>
+                            <div class="bug-v">Open — Assigned to Dev Team</div>
+                        </div>
+                        <div class="bug-cell full">
+                            <div class="bug-k">Attachments / Evidence</div>
+                            <div class="bug-v">Screen recording, browser console log (no errors thrown), and HAR file
+                                showing the login API request never fires.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GITHUB AUTOMATION PROJECTS -->
+            <div class="ap ap-rise" data-i="3">
+                <div class="sample-sub">
+                    <div class="sample-sub-title">GitHub Automation Projects</div>
+                    <div class="std-tag">Playwright / JavaScript</div>
+                </div>
+                <div class="proj-grid">
+                    <a href="https://github.com/aldrinogrrrr/sample-playwright-automation" target="_blank" class="proj-card">
+                        <div class="proj-num">01 / 03</div>
+                        <div class="proj-title">Playwright Web Automation Suite</div>
+                        <div class="proj-desc">UI test automation suite covering the Anytime Mailbox website and a
+                            personal portfolio site. Page Object Model architecture with reusable components and
+                            detailed HTML reports with screenshots — built for CI/CD integration.</div>
+                        <div class="proj-tags">
+                            <span class="stag hi">Playwright</span>
+                            <span class="stag">JavaScript</span>
+                            <span class="stag">POM</span>
+                        </div>
+                        <div class="proj-link">View Repository<span class="cl-arrow">↗</span></div>
+                    </a>
+                    <a href="https://github.com/aldrinogrrrr/swag-labs-test-automation" target="_blank" class="proj-card">
+                        <div class="proj-num">02 / 03</div>
+                        <div class="proj-title">SauceDemo E2E Test Framework</div>
+                        <div class="proj-desc">End-to-end automation framework for the SauceDemo e-commerce
+                            application, demonstrating Page Object Model, data-driven testing, and coverage of
+                            critical user journeys such as login, cart, and checkout.</div>
+                        <div class="proj-tags">
+                            <span class="stag hi">Playwright</span>
+                            <span class="stag">JavaScript</span>
+                            <span class="stag">Data-Driven</span>
+                        </div>
+                        <div class="proj-link">View Repository<span class="cl-arrow">↗</span></div>
+                    </a>
+                    <a href="https://github.com/aldrinogrrrr/restful-booker-api-tests" target="_blank" class="proj-card">
+                        <div class="proj-num">03 / 03</div>
+                        <div class="proj-title">RESTful Booker API Test Suite</div>
+                        <div class="proj-desc">API test automation suite for the RESTful Booker platform, covering
+                            health checks and full CRUD operations for booking management with structured request
+                            and response validation.</div>
+                        <div class="proj-tags">
+                            <span class="stag hi">Playwright</span>
+                            <span class="stag">API Testing</span>
+                            <span class="stag">CRUD</span>
+                        </div>
+                        <div class="proj-link">View Repository<span class="cl-arrow">↗</span></div>
+                    </a>
                 </div>
             </div>
         </div>
